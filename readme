@@ -6,14 +6,23 @@ git doesnt have a hook for pre-svn-dcommit. This is to give you the ability to a
 
 
 
-install
+install 
+ -for windows
 
- sh install.sh
- cp the pre-svn-dcommit to your .git/hooks/
+ 	 sh install.sh
+	 cp the pre-svn-dcommit to your .git/hooks/
+ -for linux
+ 	mv your git **/libexec/git-core/git-svn to  **/libexec/git-core/git-svnorig
+	cp the git-svn (downloaded) to your git **/bin/
+	cp  pre-svn-dcommit to your .git/hooks/
+
 
 
 uninstall
- 
-  sh uninstall.sh
+ -for windows 
+	  sh uninstall.sh
+ -for linux
+ 	mv git-svnorig back to git-svn
+	rm the downloaded git-svn from git **/bin
 
 
