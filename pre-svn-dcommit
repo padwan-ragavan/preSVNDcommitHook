@@ -1,0 +1,28 @@
+#!/bin/sh
+
+function isBuildFaliure()
+{
+	return `curl --location $1 --silent  | grep   [[:space:]]Failure$ | tr " " \\n | grep a | wc -w`
+}
+
+isBuildFaliure "http://admin:password@teamcityUrl:9999/viewLog.html?buildTypeId=b52&buildId=lastFinished"
+ci=$?
+isBuildFaliure "http://admin:password@jenkinsUrl:9999/viewLog.html?buildTypeId=b34&buildId=lastFinished"
+automation=$?
+
+if [ "$automation" != "0" ]
+then
+	echo "automation broken!"
+fi
+
+if [ "$ci" != "0" ]
+then
+	echo "ci broken!"
+fi
+
+if test `expr $automation + $ci` -gt 0
+then	
+	exit 1;
+fi
+
+exit 0

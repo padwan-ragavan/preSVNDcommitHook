@@ -1,0 +1,19 @@
+
+git doesnt have a hook for pre-svn-dcommit. This is to give you the ability to add your own hook for pre svn dcommit. 
+
+	exit 0 from pre-svn-dcommit is success 
+	any non zero exit from pre-svn-dcommit is failure.
+
+
+
+install
+
+ sh install.sh
+ cp the pre-svn-dcommit to your .git/hooks/
+
+
+uninstall
+ 
+  sh uninstall.sh
+
+

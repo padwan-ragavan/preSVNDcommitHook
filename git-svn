@@ -1,0 +1,29 @@
+#!/bin/sh
+
+root_dir=`git rev-parse --show-toplevel`
+pre_svn_dcommit_hook="$root_dir/.git/hooks/pre-svn-dcommit"
+hook_status=0
+
+if [ "$1" = "dcommit" ]
+then
+	if [ "$2" = "--no-verify" ]
+	then
+		echo "not running hooks !!!"
+	else		
+		if [ -f "$pre_svn_dcommit_hook" ]
+		then		
+			sh "$pre_svn_dcommit_hook"
+			hook_status=$?			
+		fi
+		if [ "$hook_status" != "0" ]
+		then
+			echo "pre-svn-dcommit hook failed, use --no-verify to override"
+		fi
+	fi
+
+	git svnorig dcommit
+	exit $?
+fi
+
+git svnorig $*
+exit $?
