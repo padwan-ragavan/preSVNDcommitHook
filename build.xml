@@ -1,0 +1,38 @@
+<project name="git pre svn dcommit hook" basedir="." default="installgitsvnhook">
+    <property environment="env"/>            
+    <property name="lib" location="lib"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${lib}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+               
+    <propertyregex property="git.install.dir"
+		input="${env.PATH}"
+		regexp="(^|;)(([^;]+git)[^;]+)(;|$)"
+		select="\3"
+	casesensitive="false" />
+	
+    <target name="installgitsvnhook">
+        <echo>installing git svn dcommit hook </echo>                                                
+        <move  file="${git.install.dir}/libexec/git-core/git-svn" tofile="${git.install.dir}/libexec/git-core/git-svnorig" failonerror="false"/>
+        <copy  file="./git-svn" tofile="${git.install.dir}/bin/git-svn" failonerror="false"/>
+		<antcall target="copyhook"/>
+    </target>
+	
+	<target name="uninstallgitsvnhook">                                              
+        <echo>unstalling git svn dcommit hook </echo>                                                
+        <move  file="${git.install.dir}/libexec/git-core/git-svnorig" tofile="${git.install.dir}/libexec/git-core/git-svn" failonerror="false"/>
+        <delete  file="${git.install.dir}/bin/git-svn" failonerror="false"/>
+    </target>
+	
+	<target name="copyhook">
+		<echo>copying hook</echo>
+		<exec executable="git" outputproperty="git.root">
+			<arg value="rev-parse"/>
+			<arg value="--show-toplevel"/>
+		</exec>
+		<copy file="./pre-svn-dcommit" tofile="${git.root}/.git/hooks/pre-svn-dcommit" failonerror="false"/>
+	</target>
+ 
+</project>
